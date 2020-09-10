@@ -15,19 +15,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 public class PrimesFinderTool {
 
 	public static void main(String[] args) {
-		            
-            int maxPrim=1000;
-            
-            PrimesResultSet prs=new PrimesResultSet("john");
-            
-            PrimeFinder.findPrimes(new BigInteger("1"), new BigInteger("10000"), prs);
-            
-            System.out.println("Prime numbers found:");
-            
-            System.out.println(prs.getPrimes());
-            
-            
-            /*while(task_not_finished){
+
+		int maxPrim=1000;
+		boolean apagados = true;
+		PrimesResultSet prs=new PrimesResultSet("john");
+		PrimesControler controlador = new PrimesControler(new BigInteger("1"), new BigInteger("10000"), prs, 4);
+		//PrimeFinder.findPrimes(new BigInteger("1"), new BigInteger("10000"), prs);
+
+		//System.out.println("Prime numbers found:");
+		//System.out.println(prs.getPrimes());
+
+
+		/*while(task_not_finished){
                 try {
                     //check every 10ms if the idle status (10 seconds without mouse
                     //activity) was reached. 
@@ -42,13 +41,13 @@ public class PrimesFinderTool {
                     Logger.getLogger(PrimesFinderTool.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }*/
-                        
-            
-            
-            
-            
+
+
+
+
+
 	}
-	
+
 }
 
 
