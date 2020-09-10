@@ -3,18 +3,13 @@ package edu.eci.arsw.primefinder;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.eci.arsw.mouseutils.MouseMovementMonitor;
-import edu.eci.arsw.mouseutils.MouseMovementMonitorExample;
 
 public class PrimesControler extends Thread{
 	private BigInteger a;
 	private BigInteger b;
 	private PrimesResultSet prs;
-	private AtomicInteger itCount;
 	private int numeroHilos;
 	private boolean estado;
 
@@ -32,15 +27,15 @@ public class PrimesControler extends Thread{
 		BigInteger numeroFinal = numeroProceso;
 		PrimeFinder temporal;
 		estado = false;
-		for (int i =0 ; i < numeroHilos ; i++) {
-			if (i+1 == numeroHilos) {
+		for (int i =0 ; i < this.numeroHilos ; i++) {
+			if (i+1 == this.numeroHilos) {
 				temporal = new PrimeFinder(numeroInicial, numeroFinal.add((numeroFinal.mod(numeroHilosBig))), prs);
 
 			}else {
 				temporal = new PrimeFinder(numeroInicial, numeroFinal, prs);
 			}
 			hilos.add(temporal);
-			System.out.println("Numero inicial " + numeroInicial + " Numero final "+ numeroFinal);
+			//System.out.println("Numero inicial " + numeroInicial + " Numero final "+ numeroFinal);
 			numeroInicial = numeroInicial.add(numeroProceso);
 			numeroFinal = numeroFinal.add(numeroProceso);
 
@@ -54,10 +49,9 @@ public class PrimesControler extends Thread{
 			estado = true;
 		}
 		boolean corriendo = true; 
-
 		while(corriendo) {
 			//System.out.println(prs.getPrimes());
-			if (MouseMovementMonitor.getInstance().getTimeSinceLastMouseMovement() == 10000  ) {
+			if (MouseMovementMonitor.getInstance().getTimeSinceLastMouseMovement() == 10000) {
 				//System.out.println(MouseMovementMonitor.getInstance().getTimeSinceLastMouseMovement());
 				for(PrimeFinder hilo : hilos) {
 					if(estado) {
@@ -73,8 +67,23 @@ public class PrimesControler extends Thread{
 				}else {
 					estado = true;
 				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-
+			int numerHilosFinalizados = 0;
+			for (PrimeFinder hilo : hilos) {
+				if (hilo.setFin()){
+					numerHilosFinalizados++;
+				}
+			}
+			if (numerHilosFinalizados == hilos.size()) {
+				corriendo = false; 
+			}
 		}
+		System.out.println("Prime numbers found:");
+		System.out.println(prs.getPrimes());
 	}
 }

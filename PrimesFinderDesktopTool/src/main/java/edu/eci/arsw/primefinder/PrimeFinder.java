@@ -1,10 +1,9 @@
 package edu.eci.arsw.primefinder;
 
-import edu.eci.arsw.math.MathUtilities;
 import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import edu.eci.arsw.math.MathUtilities;
 
 public class PrimeFinder extends Thread{
     private BigInteger a;
