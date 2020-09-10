@@ -48,6 +48,33 @@ public class PrimesControler extends Thread{
 	}
 	@Override
 	public void run() {
-		
+		//System.out.println("arranque");
+		for(PrimeFinder hilo : hilos) {
+			hilo.start();
+			estado = true;
+		}
+		boolean corriendo = true; 
+
+		while(corriendo) {
+			//System.out.println(prs.getPrimes());
+			if (MouseMovementMonitor.getInstance().getTimeSinceLastMouseMovement() == 10000  ) {
+				//System.out.println(MouseMovementMonitor.getInstance().getTimeSinceLastMouseMovement());
+				for(PrimeFinder hilo : hilos) {
+					if(estado) {
+						hilo.setEstado(false);
+						//System.out.println("Pare");
+					}else {
+						hilo.aCorrer();
+						//System.out.println("Corriendo");
+					}
+				}
+				if(estado) {
+					estado = false;
+				}else {
+					estado = true;
+				}
+			}
+
+		}
 	}
 }
